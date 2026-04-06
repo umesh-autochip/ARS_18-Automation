@@ -4,10 +4,12 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.io.FileHandler;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -46,11 +48,21 @@ public class BrowserSetup {
 
     @BeforeClass
     public void browserSetup() {
-        driver = new ChromeDriver();
+        /*driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));*/
+        /*System.setProperty(
+                "webdriver.chrome.driver",
+                "C:\\WebDriver\\chromedriver.exe"
+        );*/
+        WebDriverManager.chromedriver().setup();
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--start-maximized");
+        driver = new ChromeDriver(options);
         driver.get("http://34.131.129.205:8069/web/login?redirect=%2Fodoo%3F");
         //test = extent.createTest(method.getName());
+
     }
     @BeforeMethod
     public void createTest(Method method) {

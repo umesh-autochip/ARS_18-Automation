@@ -35,15 +35,18 @@ public class PageClass extends BasePage      {
     WebElement AddProduct;
     @FindBy(xpath = "//input[@placeholder='Search a product']")
     WebElement SearchProduct;
-    @FindBy(xpath = "//a[@id='autocomplete_0_0']")
+    @FindBy(xpath = "//a[@id='autocomplete_0_3']")
     WebElement Selectproduct;
+    //@FindBy(xpath = "//span[normalize-space()='Sky Blue']")
     @FindBy(xpath = "//span[normalize-space()='Sky Blue']")
-    WebElement SkyBlue;
+    WebElement CosmosBlack;
     @FindBy(xpath = "//button[@name='sale_product_configurator_confirm_button']")
     WebElement ConfirmProduct;
     @FindBy(xpath = "//span[normalize-space()='Confirm']")
     WebElement Confirm;
-    @FindBy(xpath = "//button[@class='btn oe_stat_button btn-outline-secondary flex-grow-1 flex-lg-grow-0']")
+
+   // @FindBy(xpath = "//button[@class='btn oe_stat_button btn-outline-secondary flex-grow-1 flex-lg-grow-0']")
+    @FindBy(xpath = "//span[@class='o_stat_text']")
     WebElement deliverBtn;
     @FindBy(xpath = "//button[@name='Open Move']")
     WebElement openMoveBtn;
@@ -78,6 +81,49 @@ public class PageClass extends BasePage      {
     WebElement returnBtn;
     @FindBy(xpath = "//span[normalize-space()='Validate']")
     WebElement validateReturn;
+
+    //New Requirements
+    @FindBy(xpath = "//label[normalize-space()='Without Down Payment']")
+    WebElement downPayment;
+
+    @FindBy(xpath = "//label[normalize-space()='Showroom Delivery']")
+    WebElement homeDelivery;
+
+    @FindBy(xpath = "//input[@id='expected_delivery_date_0']")
+    WebElement expectedDeliveryDate;
+
+    @FindBy(xpath = "//span[normalize-space()='27']")
+    WebElement deliveryDate;
+
+    @FindBy(xpath = "//button[@name='action_confirm_create_invoice']//span[contains(text(),'Confirm')]")
+    WebElement deliverConfirm;
+
+    //@FindBy(xpath = "//td[@name='product_id']")
+    @FindBy(xpath = "//button[@name='Open Move']")
+    WebElement lineProduct;
+
+    @FindBy(xpath = "//div[@name='quant_id']")
+    WebElement quant;
+
+    @FindBy(xpath = "//tbody/tr[1]/td[1]/a[1]")
+    WebElement AddLine;
+
+    @FindBy(xpath = "//td[normalize-space()='CHSN1773809194076']")
+    WebElement Chassis;
+
+    @FindBy(xpath = "//td[contains(text(),'0.00')]")
+    WebElement DoneQuantity;
+
+    //@FindBy(xpath = "//span[contains(text(),'WH/Stock - CH4K7M2P9R5T8X3L6')]")
+    @FindBy(xpath = "(//span[contains(text(),'WH/Stock')])[last()]")
+     WebElement ChassisFeild;
+
+    //@FindBy(xpath = "//input[@id='warehouse_id_0']")
+    @FindBy(xpath = "//label[normalize-space()='Warehouse']")
+    WebElement Warehouse;
+
+    @FindBy(xpath = "//a[@id='warehouse_id_0_0_4']")
+    WebElement KIAWH;
 
 
     public void setEmail(String text) {
@@ -147,7 +193,7 @@ public class PageClass extends BasePage      {
                 .perform();
 
         // 5️⃣ Wait for autocomplete dropdown
-        By suggestionBy = By.xpath("//ul[contains(@class,'ui-autocomplete')]//li[1]");
+        By suggestionBy = By.xpath("//ul[contains(@class,'ui-autocomplete')]//li[4]");
         WebElement firstSuggestion = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(suggestionBy)
         );
@@ -212,7 +258,7 @@ public class PageClass extends BasePage      {
         pause(1000);
     }
     public void setSkyBlue(){
-        click(SkyBlue);
+        click(CosmosBlack);
         pause(1000);
     }
 
@@ -224,22 +270,89 @@ public class PageClass extends BasePage      {
         click(Confirm);
         pause(1000);
     }
-    public void clickDelivery(){
-        click(deliverBtn);
-        pause(100);
-    }
-    public void clickOpenMove(){
-        click(openMoveBtn);
+    public void clickDownPayment(){
+        click(downPayment);
         pause(1000);
     }
+    public void clickHomeDelivery(){
+        click(homeDelivery);
+        pause(1000);
+    }
+    public void clickExpectedDelivery(){
+        click(expectedDeliveryDate);
+        pause(1000);
+    }
+    public void clickDeliveryDate(){
+        click(deliveryDate);
+        pause(1000);
+    }
+    public void clickDeliveryConfirm(){
+        click(deliverConfirm);
+        pause(1000);
+    }
+    public void clickDelivery(){
+        click(deliverBtn);
+        pause(1000);
+    }
+
+    public void clickLineProduct(){
+        click(lineProduct);
+        pause(1000);
+    }
+    public void clickQuant(){
+
+        Actions action = new Actions(driver);
+        action.click(quant);
+        pause(1000);
+        action.sendKeys(Keys.DELETE);
+        action.sendKeys("CHSN1770179095511");
+        action.sendKeys(Keys.ENTER);
+        action.build().perform();
+    }
+  /*  public void clickOpenMove(){
+        click(openMoveBtn);
+        pause(1000);
+    }*/
 
     public void clickSave(){
         click(saveBtn);
         pause(1000);
     }
     public void clickValidateDelivery(){
-        click(validateDelivery);
-        pause(1000);
+        //click(validateDelivery);
+        //pause(1000);
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        // Click Validate button
+        WebElement validateBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(By.xpath("//span[normalize-space()='Validate']"))
+        );
+        validateBtn.click();
+
+        try {
+            // Wait for validation error popup
+            WebElement errorMessage = wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(By.xpath("//p[@class='text-prewrap']"))
+            );
+
+            // If found → stop execution
+            if (errorMessage.isDisplayed()) {
+                String message = errorMessage.getText();
+                System.out.println("Validation Error Found: " + message);
+
+                throw new RuntimeException("Stopping execution due to validation error.");
+            }
+
+        } catch (TimeoutException e) {
+            // No validation error popup → Continue execution
+            System.out.println("No validation error popup. Continuing...");
+        }
+
+        // Other methods will execute only if no validation error
+       // performNextSteps(driver);
+
+
+
     }
     public void clickCreateInvoice(){
         click(createInvoice);
@@ -303,9 +416,68 @@ public class PageClass extends BasePage      {
         WebElement ret = wait.until(ExpectedConditions.elementToBeClickable(returnBtn));
         ((JavascriptExecutor)driver).executeScript("arguments[0].click()", ret);
     }
-    public void clickvalidateReturn(){
+    public void clickValidateReturn(){
         click(validateReturn);
         pause(1000);
     }
+
+    public void clickAddLine(){
+        click(AddLine);
+        pause(1000);
+    }
+    public void selectChassis(){
+        /*click(Chassis);
+        pause(1000);*/
+
+        Actions action = new Actions(driver);
+        action.click(Chassis);
+        action.sendKeys(Keys.ENTER);
+        action.build().perform();
+    }
+    public void EnterDoneQuantity() {
+
+       /* WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebElement doneCell = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//td[@name='quantity']")
+                )
+        );
+        doneCell.click();
+
+        WebElement inputField = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.xpath("//td[@name='quantity']//input")
+                )
+        );
+
+        inputField.sendKeys(Keys.CONTROL + "a");
+        inputField.sendKeys(Keys.DELETE);
+        inputField.sendKeys("1");
+        inputField.sendKeys(Keys.ENTER);
+
+    }*/
+        ChassisFeild.sendKeys(Keys.TAB);
+        pause(500);
+        ChassisFeild.sendKeys(Keys.TAB);
+
+        Actions actions = new Actions(driver);
+
+        actions.sendKeys(Keys.CONTROL + "a")
+                .sendKeys(Keys.DELETE)
+                .sendKeys("1")
+                .sendKeys(Keys.ENTER)   // commit value
+                .perform();
+
+    }
+
+    public void clickWareHouse(){
+        Warehouse.click();
+        pause(1000);
+    }
+    public void selectWarehouse(){
+        KIAWH.click();
+        pause(1000);
+    }
+
 
 }
