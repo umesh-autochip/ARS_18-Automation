@@ -35,7 +35,7 @@ public class PageClass extends BasePage      {
     WebElement AddProduct;
     @FindBy(xpath = "//input[@placeholder='Search a product']")
     WebElement SearchProduct;
-    @FindBy(xpath = "//a[@id='autocomplete_0_3']")
+    @FindBy(xpath = "//a[@id='autocomplete_0_4']")
     WebElement Selectproduct;
     //@FindBy(xpath = "//span[normalize-space()='Sky Blue']")
     @FindBy(xpath = "//span[normalize-space()='Sky Blue']")
@@ -108,7 +108,7 @@ public class PageClass extends BasePage      {
     @FindBy(xpath = "//tbody/tr[1]/td[1]/a[1]")
     WebElement AddLine;
 
-    @FindBy(xpath = "//td[normalize-space()='CHSN1773809194076']")
+    @FindBy(xpath = "//td[normalize-space()='CHSN1775534239989']")
     WebElement Chassis;
 
     @FindBy(xpath = "//td[contains(text(),'0.00')]")

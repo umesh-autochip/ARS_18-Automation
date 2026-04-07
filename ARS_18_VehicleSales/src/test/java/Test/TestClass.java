@@ -9,7 +9,7 @@ public class TestClass extends BrowserSetup {
     @Test(priority = 1)
     public void verifyLogin() {
         PageClass pc = new PageClass(driver);
-        pc.setEmail("ishita.verma@autochip.in");
+        pc.setEmail("vsalesalldocuments@gmail.com");
         pc.setPassword("1234");
         pc.clickLogin();
     }
